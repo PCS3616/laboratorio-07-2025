@@ -38,20 +38,22 @@ foi desenvolvido com os módulos `principal.asm` e `secundario.asm`.
   $ mvn-cli assemble -i principal.asm > principal.int
   $ mvn-cli assemble -i secundario.asm > secundario.int
   ```
+
 2. Em seguida, é necessário ligar os arquivos usando o ligador para gerar um
-   arquivo LIG caso todos os símbolos estejam resolvidos
+   arquivo LIG caso todos os símbolos estejam resolvidos.
+   No lugar da flag `--complete`, é possível passar a flag `--partial` para
+   realizar ligação parcial, usada para gerar bibliotecas e não executáveis
   ```shell
   $ mvn-cli link -i principal.int -i secundario.int --complete > programa.lig
   ```
-   no lugar da flag `--complete`, é possível passar a flag `--partial` para
-   realizar ligação parcial, usada para gerar bibliotecas e não executáveis
+
 3. Por fim, é necessário relocar o programa LIG ligado para gerar um
-   executável MVN com endereços absolutos:
+   executável MVN com endereços absolutos.
+   É obrigatório passar a base de relocação (`--base` ou `-b`), ainda que em
+   geral utilizemos 0.
   ```shell
   $ mvn-cli assemble -i programa.lig --base 0 > programa.mvn
   ```
-   é obrigatório passar a base de relocação (`--base` ou `-b`), ainda que em
-   geral utilizemos 0.
 
 ### Execução do código gerado
 
