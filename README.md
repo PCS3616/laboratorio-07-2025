@@ -1,58 +1,59 @@
-# PCS3616 - Laboratório 8 - ASM 1
+# PCS3616 - Laboratório 7 - ASM 1
 
 Na aula de hoje começamos o estudo e uso da linguagem de montagem da
-MVN, o ASM (assembly), e da função de pilha implementada na MVN. Para
-isso precisamos usar os módulos Montador, Ligador e Relocador (MLR),
-então a primeira coisa que devemos fazer é mudar nosso diretório para
-onde possamos executar facilmente esses módulos:
+MVN, o ASM (assembly), e da função de pilha implementada na MVN.
+A partir desta aula você só escreverá códigos em ASM, e para isso
+precisamos usar os módulos Montador, Ligador e Relocador.
 
-  -----------------------------------------------------------------------
-  cd \~/Documents/pcs3616/MLR/
-  -----------------------------------------------------------------------
+## Instalação das ferramentas
 
-  -----------------------------------------------------------------------
+Diferentemente do monitor, essas ferramentas foram escritas em uma
+linguagem compilada ([Rust](https://www.rust-lang.org/)), então é
+somente necessário instalar um executável. Esse executável está
+disponível na aba "Releases" do
+[repositório das ferramentas](https://github.com/PCS3616/mvn-mounter).
 
-À partir desta aula você só escreverá códigos em ASM, porém para
-executá-los eles precisam estar em linguagem de máquina, para fazer essa
-transposição você deverá usar o montador:
+## Instruções de uso das ferramentas
 
-  -----------------------------------------------------------------------
-  #Como usar o montador\
-  python3 montador.py seu_codigo.asm\
-  #Saída esperada:\
-  #Arquivo seu_codigo.asm montado para seu_codigo.mvn com sucesso!
-  -----------------------------------------------------------------------
+Vale mencionar que a interface das ferramentas possui opções `help` e
+`--help` que nomeiam os argumentos necessários.
 
-  -----------------------------------------------------------------------
+### Programas exclusivamente com endereços absolutos
 
-É comum que se escreva vários arquivos com funções a serem ligadas para
-funcionarem em conjunto, os detalhes de como fazer isso já foram vistos
-em sala, e para ligar arquivos **JÁ MONTADOS** usamos o ligador:
+Para executar programas escritos em linguagem de montagem, eles precisam
+estar em linguagem de máquina. Essa transposição deve ser feita usando o
+montador como no exemplo a seguir:
+```shell
+$ mvn-cli assemble -i absoluto.asm > absoluto.mvn
+```
 
-  -----------------------------------------------------------------------
-  #Como usar o ligador\
-  python3 ligador.py in1.mvn in2.mvn in3.mvn out.mvn\
-  #Saída esperada:\
-  #Códigos ligados para out.mvn
-  -----------------------------------------------------------------------
+### Programas com endereços relocáveis
 
-  -----------------------------------------------------------------------
+O processo é mais complexo com endereços relocáveis.
+Para demonstrar como usar as ferramentas, vamos assumir que um programa
+foi desenvolvido com os módulos `principal.asm` e `secundario.asm`.
 
-No script acima ligamos 3 arquivos (in1.mvn, in2.mvn e in3.mvn) e a
-saída é escrita em out.mvn, mas podemos ligar quantos arquivos
-quisermos.
+1. Em primeiro lugar, é necessário gerar arquivos INT a partir do montador:
+  ```shell
+  $ mvn-cli assemble -i principal.asm > principal.int
+  $ mvn-cli assemble -i secundario.asm > secundario.int
+  ```
+2. Em seguida, é necessário ligar os arquivos usando o ligador para gerar um
+   arquivo LIG caso todos os símbolos estejam resolvidos
+  ```shell
+  $ mvn-cli link -i principal.int -i secundario.int --complete > programa.lig
+  ```
+   no lugar da flag `--complete`, é possível passar a flag `--partial` para
+   realizar ligação parcial, usada para gerar bibliotecas e não executáveis
+3. Por fim, é necessário relocar o programa LIG ligado para gerar um
+   executável MVN com endereços absolutos:
+  ```shell
+  $ mvn-cli assemble -i programa.lig --base 0 > programa.mvn
+  ```
+   é obrigatório passar a base de relocação (`--base` ou `-b`), ainda que em
+   geral utilizemos 0.
 
-Se você usou origens relocáveis no(s) seu(s) código(s), você também
-precisará reloca-los para que se tornem absolutos:
-
-  -----------------------------------------------------------------------
-  #Como usar o relocador\
-  python3 relocador.py in.mvn out.mvn\
-  #Saida esperada:\
-  #Código relocado para out.mvn
-  -----------------------------------------------------------------------
-
-  -----------------------------------------------------------------------
+### Execução do código gerado
 
 Para executar o código MVN gerado você tem que voltar para o diretório
 \~/Documents/pcs3616/MVN/ ou referenciá-lo do diretório MLR/ para
