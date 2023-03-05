@@ -13,6 +13,22 @@ somente necessário instalar um executável. Esse executável está
 disponível na aba "Releases" do
 [repositório das ferramentas](https://github.com/PCS3616/mvn-mounter).
 
+É recomendado que você realize download do executável em algum diretório
+no seu `$PATH`, ou que coloque ele dentro do diretório `submission` do
+seu repositório. Em ambos os casos, é necessário indicar ao sistema
+operacional que o arquivo é executável fazendo
+```shell
+$ chmod +x <EXECUTAVEL>
+```
+
+Caso decida colocar o executável dentro de `submission`, você deverá usar
+uma referência relativa ao caminho dele no momento da execução; se o
+executável se chamar `mvn-cli` por exemplo, você deve executar, de dentro
+do diretório `submission`
+```shell
+$ ./mvn-cli <ARGS...>
+```
+
 ## Instruções de uso das ferramentas
 
 Vale mencionar que a interface das ferramentas possui opções `help` e
