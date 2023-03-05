@@ -34,6 +34,10 @@ $ ./mvn-cli <ARGS...>
 Vale mencionar que a interface das ferramentas possui opções `help` e
 `--help` que nomeiam os argumentos necessários.
 
+Você não precisa se preocupar com os arquivos INT, LIG ou MVN gerados no
+diretório `submission`, já que eles devem ser ignorados automaticamente
+pelo Git e não serão avaliados.
+
 ### Programas exclusivamente com endereços absolutos
 
 Para executar programas escritos em linguagem de montagem, eles precisam
