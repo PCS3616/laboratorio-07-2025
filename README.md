@@ -9,71 +9,10 @@ precisamos usar os módulos Montador, Ligador e Relocador.
 
 Diferentemente do monitor, essas ferramentas foram escritas em uma
 linguagem compilada ([Rust](https://www.rust-lang.org/)), então é
-somente necessário instalar um executável. Esse executável está
-disponível na aba "Releases" do
-[repositório das ferramentas](https://github.com/PCS3616/mvn-mounter).
-
-É recomendado que você realize download do executável em algum diretório
-no seu `$PATH`, ou que coloque ele dentro do diretório `submission` do
-seu repositório. Em ambos os casos, é necessário indicar ao sistema
-operacional que o arquivo é executável fazendo
-```shell
-$ chmod +x <EXECUTAVEL>
-```
-
-Caso decida colocar o executável dentro de `submission`, você deverá usar
-uma referência relativa ao caminho dele no momento da execução; se o
-executável se chamar `mvn-cli` por exemplo, você deve executar, de dentro
-do diretório `submission`
-```shell
-$ ./mvn-cli <ARGS...>
-```
-
-## Instruções de uso das ferramentas
-
-Vale mencionar que a interface das ferramentas possui opções `help` e
-`--help` que nomeiam os argumentos necessários.
-
-Você não precisa se preocupar com os arquivos INT, LIG ou MVN gerados no
-diretório `submission`, já que eles devem ser ignorados automaticamente
-pelo Git e não serão avaliados.
-
-### Programas exclusivamente com endereços absolutos
-
-Para executar programas escritos em linguagem de montagem, eles precisam
-estar em linguagem de máquina. Essa transposição deve ser feita usando o
-montador como no exemplo a seguir:
-```shell
-$ mvn-cli assemble -i absoluto.asm > absoluto.mvn
-```
-
-### Programas com endereços relocáveis
-
-O processo é mais complexo com endereços relocáveis.
-Para demonstrar como usar as ferramentas, vamos assumir que um programa
-foi desenvolvido com os módulos `principal.asm` e `secundario.asm`.
-
-1. Em primeiro lugar, é necessário gerar arquivos INT a partir do montador:
-  ```shell
-  $ mvn-cli assemble -i principal.asm > principal.int
-  $ mvn-cli assemble -i secundario.asm > secundario.int
-  ```
-
-2. Em seguida, é necessário ligar os arquivos usando o ligador para gerar um
-   arquivo LIG caso todos os símbolos estejam resolvidos.
-   No lugar da flag `--complete`, é possível passar a flag `--partial` para
-   realizar ligação parcial, usada para gerar bibliotecas e não executáveis
-  ```shell
-  $ mvn-cli link -i principal.int -i secundario.int --complete > programa.lig
-  ```
-
-3. Por fim, é necessário relocar o programa LIG ligado para gerar um
-   executável MVN com endereços absolutos.
-   É obrigatório passar a base de relocação (`--base` ou `-b`), ainda que em
-   geral utilizemos 0.
-  ```shell
-  $ mvn-cli assemble -i programa.lig --base 0 > programa.mvn
-  ```
+somente necessário instalar um executável.
+Instruções sobre esse processo e sobre as opções disponíveis nas
+ferramentas estão disponíveis
+[em seu repositório](https://github.com/PCS3616/mvn-rs#readme)
 
 ### Execução do código gerado
 
