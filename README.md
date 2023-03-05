@@ -77,11 +77,8 @@ foi desenvolvido com os módulos `principal.asm` e `secundario.asm`.
 
 ### Execução do código gerado
 
-Para executar o código MVN gerado você tem que voltar para o diretório
-\~/Documents/pcs3616/MVN/ ou referenciá-lo do diretório MLR/ para
-executar o interpretador de MVN. Sugestão: deixe dois terminais abertos,
-um em MVN/ e outro em MLR/, dessa forma não será necessário usar o
-comando cd a todo momento.
+Executar o código MVN gerado deve ser feito da mesma forma que com o
+código MVN escrito manualmente.
 
 Outra coisa legal dessa aula é que, para os usuários do editor de texto
 Sublime, existe um syntax highlighter (o arquivo que deixa os códigos
