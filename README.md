@@ -80,107 +80,85 @@ foi desenvolvido com os módulos `principal.asm` e `secundario.asm`.
 Executar o código MVN gerado deve ser feito da mesma forma que com o
 código MVN escrito manualmente.
 
-Outra coisa legal dessa aula é que, para os usuários do editor de texto
-Sublime, existe um syntax highlighter (o arquivo que deixa os códigos
-coloridos) para ASM. Para usar basta você baixar o arquivo
-"asm.sublime-syntax" que também está no Moodle desta semana. Para
-instalar a linguagem, é só abrir o arquivo no Sublime e salvá-lo por lá.
-A mágica está feita.
-
-**Exercícios**
+## Exercícios
 
 1.  No laboratório 5, você escreveu as sub-rotinas OP2MNEM e MNEM2OP.
     Neste primeiro exercício, você deverá escrever uma versão modificada
     deste programa, desta vez usando a linguagem de montagem da MVN.
 
-Especificações do programa:
+    Especificações do programa:
 
--   Nome do arquivo: **op-mnem.asm**
+    -   Nome do arquivo: **op-mnem.asm**
 
--   Layout da memória:
+    -   Layout da memória:
 
-  -----------------------------------------------------------------------
-  **Endereço/Rótulo**    **Conteúdo**
-  ---------------------- ------------------------------------------------
-  0x000                  Jump para o programa principal
+    | **Endereço/Rótulo** | **Conteúdo**                          |
+    |---------------------|---------------------------------------|
+    | `0x000`             | Jump para o programa principal        |
+    | OPCODE              | Variável OPCODE (variável \"global\") |
+    | MNEM                | Variável MNEM (variável \"global\")   |
+    | OP2MNEM             | Sub-rotina OP2MNEM                    |
+    | MNEM2OP             | Sub-rotina MNEM2OP                    |
+    | `0x0300` MAIN       | Programa principal                    |
+    | TABELA              | Tabela de mnemônicos                  |
 
-  OPCODE                 Variável OPCODE (variável \"global\")
-
-  MNEM                   Variável MNEM (variável \"global\")
-
-  OP2MNEM                Sub-rotina OP2MNEM
-
-  MNEM2OP                Sub-rotina MNEM2OP
-
-  0x0300/MAIN            Programa principal
-
-  TABELA                 Tabela de mnemônicos
-  -----------------------------------------------------------------------
-
-**Entrega:** enviar o arquivo **op-mnem.asm** dentro de um zip**.**
+    **Entrega:** arquivo **op-mnem.asm**
 
 2.  Agora vamos aprender a usar a pilha implementada pela MVN.
 
-A pilha implementada na MVN é muito simples e deve ser operada com
-cautela. Para utilizar as funções auxiliares e implementar a pilha você
-deve fazer uso da instrução OS (supervisor), o código da função a ser
-executada pelo supervisor deve ser carregado no acumulador e o código de
-operação da função a ser passado no operando de OS é 0x57. O uso da
-instrução deve se dar da seguinte forma: **OS** \<NUM_ARG\> \<FUNC\>
+    A pilha implementada na MVN é muito simples e deve ser operada com
+    cautela. Para utilizar as funções auxiliares e implementar a pilha você
+    deve fazer uso da instrução OS (supervisor), o código da função a ser
+    executada pelo supervisor deve ser carregado no acumulador e o código de
+    operação da função a ser passado no operando de OS é `0x57`. O uso da
+    instrução deve se dar da seguinte forma: `OS /<NUM_ARG><FUNC>`
 
-NUM_ARG = 0 (para funções de get, sem parâmetro) ; Ex. de chamada: OS
-/057
+    ```
+    NUM_ARG = 0    (para funções de get, sem parâmetro)        ; Ex. de chamada: OS /057
+            = 1    (para funções de set, com um parâmetro)     ; Ex. de chamada: OS /157
+    FUNC    = 0x57                                             ; indica qual a função a ser empregada
+    ```
 
-= 1 (para funções de set, com um parâmetro) ; Ex. de chamada: OS /157
+    A pilha será implementada de forma decrescente, diferente daquela que
+    vocês utilizaram na disciplina de estrutura de dados. Ou seja, a cada
+    mudança do ponteiro deve-se decrementar o valor do endereço. E o valor
+    do decremento é de dois (2) e não de um (1) porque na MVN os dados
+    ocupam sempre dois bytes.
 
-FUNC = 0X57 ; indica qual a função a ser empregada
+    O endereço de stack-pointer (SP) da pilha estará inicializado quando vocês
+    forem iniciar as operações, para conhecer seu valor empregue a função
+    `0x0`, para preencher o novo valor (decrementando de dois) empregue a
+    função `0x1`. A pilha deverá ter seu stack-pointer sempre apontando para o
+    próximo valor livre, de forma a que sempre se possa inserir algum valor
+    na pilha sem necessitar alterar seu ponteiro. Assim, para se colocar um
+    valor no endereço apontado pelo SP empregue a função `0x3` e
+    posteriormente corrija o SP decrementando dois do valor
+    atual. Para capturar um valor do topo da pilha empregue a função `0x2`,
+    mas antes corrija o valor do stack-pointer incrementando dois ao valor
+    atual.
 
-A pilha será implementada de forma decrescente, diferente daquela que
-vocês utilizaram na disciplina de estrutura de dados. Ou seja, a cada
-mudança do ponteiro deve-se decrementar o valor do endereço. E o valor
-do decremento é de dois (2) e não de um (1) porque na MVN os dados
-ocupam sempre dois bytes.
+    Para chamar uma das funções basta preencher o acumulador com o valor
+    correspondente. As funções para uso da pilha são:
 
-O endereço de stack-pointer da pilha estará inicializado quando vocês
-forem iniciar as operações, para conhecer seu valor empregue a função
-0x0, para preencher o novo valor (decrementando de dois) empregue a
-função 0x1. A pilha deverá ter seu stack-pointer sempre apontando para o
-próximo valor livre, de forma a que sempre se possa inserir algum valor
-na pilha sem necessitar alterar seu ponteiro. Assim, para se colocar um
-valor no endereço apontado pelo stack-pointer empregue a função 0x3 e
-posteriormente corrija o stack-pointer decrementando dois do valor
-atual. Para capturar um valor do topo da pilha empregue a função 0x2,
-mas antes corrija o valor do stack-pointer incrementando dois ao valor
-atual.
+    | **Função**    | **Valor**  | **Descrição** |
+    |-------------- |------------|---------------|
+    | get pointer   | 0          | Salva em AC valor do SP                                                      |
+    | set pointer   | 1          | Salva no SP o valor passado como argumento                                   |
+    | get stack top | 2          | Salva em AC o valor no endereço de memória apontado pelo SP                  |
+    | set stack top | 3          | Salva no endereço de memória apontado pelo SP o valor passado como argumento |
 
-Para chamar uma das funções basta preencher o acumulador com o valor
-correspondente. As funções para uso da pilha são:
+    *Seu trabalho* será escrever 3 rotinas:
 
--   0: get pointer, esta função salva no acumulador o valor armazenado
-    no ponteiro stack-pointer, que está no endereço 0xFFE;
+    | Rotina        | Rótulo | Descrição |
+    |---------------|--------|-----------|
+    | Empilha       | `EMPI` | Lê uma variável global `VALOR` e empilha seu conteúdo              |
+    | Desempilha    | `DEMP` | Desempilha um valor e salva na variável global `VALOR`             |
+    | Principal     | `MAIN` | Lê uma entrada do teclado, empilha, desempilha e a escreve na tela |
 
--   1: set pointer, esta função salva no ponteiro stack-pointer, que
-    está no endereço 0xFFE, o valor passado como argumento;
+    **Observações importantes:**
 
--   2: get stacktop, esta função salva no acumulador o valor armazenado
-    no endereço de memória apontado pelo ponteiro stack-pointer;
+    - Não esqueça de exportar todos os nomes
 
--   3: set stacktop, esta função salva no endereço de memória apontado
-    pelo ponteiro stack-pointer o valor passado pelo argumento.
+    - Não utilize os endereços `0xF00` e `0xF02`.
 
-Seu trabalho será escrever 3 rotinas:
-
--   Empilha: uma rotina que lê uma variável global VALOR e empilha seu
-    conteúdo, o rótulo para esta rotina deve ser EMPI;
-
--   Desempilha: uma rotina que desempilha um número e salva na variável
-    global VALOR, o rótulo para esta rotina deve ser DEMP;
-
--   Principal: uma rotina que lê uma entrada do teclado, empilha,
-    desempilha e escreve na tela, o rótulo para esta rotina deve ser
-    MAIN.
-
-> OBS.: Não esqueçam de exportar todos os nomes. E **[não]{.underline}**
-> utilizem os endereços 0xf00 e 0xf02.
-
-**Entrega:** enviar o arquivo **stack.asm** contendo as três rotinas.
+    **Entrega:** arquivo **stack.asm** contendo as três rotinas.
