@@ -1,6 +1,8 @@
 *
 !README.md
 !.gitignore
+!autogradle
+!autogradle/*.py
 !submission
 !submission/.gitkeep
 !submission/*.asm
