@@ -57,6 +57,23 @@ código MVN escrito manualmente.
             = 1    (para funções de set, com um parâmetro)     ; Ex. de chamada: OS /157
     FUNC    = 0x57                                             ; indica qual a função a ser empregada
     ```
+    
+    Os argumentos da função (quando presentes) devem ser passados nas
+    posições de memória anteriores à chamada de OS, com o endereço mais
+    próximo correspondendo ao primeiro argumento, e os mais afastados, a
+    argumentos seguintes.
+    
+    Por exemplo, para chamar a fnunção de pilha de código 3 passando o
+    argumento 1, podemos escrever:
+    
+    ```
+            LV =1      ; Escreve 1 no endereço
+            MM OS_ARG  ; logo antes da chamada de OS
+            LV =3      ; Função de código 3
+            JP OS_CALL
+    OS_ARG  $  =1
+    OS_CALL OS /157
+    ```
 
     A pilha será implementada de forma decrescente, diferente daquela que
     vocês utilizaram na disciplina de estrutura de dados. Ou seja, a cada
