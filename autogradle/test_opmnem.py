@@ -130,7 +130,7 @@ def run_op2mnem(output_dir: Path, opcode: str) -> str:
         run_mvn("\n".join((
             "s", "a", "3", "00", output_file.name, "e",
             f"p {executable_filepath}",
-            "r", "300", "y",
+            "r", "300", "n",
             "x",
         )))
 
