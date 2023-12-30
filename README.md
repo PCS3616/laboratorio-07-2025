@@ -53,14 +53,14 @@ inteiros, ocupando, cada qual, dois bytes de memória.
 Observação 2: recomenda-se criar um trecho de código separado para as tabelas
 de mneumônicos e opcodes (vide Layout da Memória).
 
-    -   Layout da memória:
+  -   Layout da memória:
 
-    | **Endereço/Rótulo** | **Conteúdo**                          |
-    |---------------------|---------------------------------------|
-    | `0x000`             | Jump para o programa principal        |
-    | `0x002` OPCODE      | Variável OPCODE (variável \"global\") |
-    | `0x004` MNEM        | Variável MNEM (variável \"global\")   |
-    | `0x100` OP2MNEM     | Sub-rotina OP2MNEM                    |
-    | `0x200` MNEM2OP     | Sub-rotina MNEM2OP                    |
-    | `0x300` MAIN        | Programa principal                    |
-    | TABELA              | Tabela de mnemônicos                  |
+  | **Endereço/Rótulo** | **Conteúdo**                          |
+  |---------------------|---------------------------------------|
+  | `0x000`             | Jump para o programa principal        |
+  | `0x002` OPCODE      | Variável OPCODE (variável \"global\") |
+  | `0x004` MNEM        | Variável MNEM (variável \"global\")   |
+  | `0x100` OP2MNEM     | Sub-rotina OP2MNEM                    |
+  | `0x200` MNEM2OP     | Sub-rotina MNEM2OP                    |
+  | `0x300` MAIN        | Programa principal                    |
+  | TABELA              | Tabela de mnemônicos                  |
