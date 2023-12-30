@@ -13,7 +13,7 @@ def fatorial(n: int):
     return 1
   return n*fatorial(n-1)
 
-def test(n: int = 0):
+def test_fat(n: int = 0):
     filecode = executable(SUBMISSION_PATH / "fatorial")
     assert filecode.exists(), f"A submissão não contém o arquivo '{filecode.name}'"
 
@@ -48,14 +48,11 @@ def test(n: int = 0):
     assert fat == fatorial(n), \
       f"Seu código não está correto\nConfira seu envio."
 
-def test_1():
-  test(0)
+def test_fat_1():
+  test_fat(1)
 
-def test_2():
-  test(1)
+def test_fat_4():
+  test_fat(4)
 
-def test_3():
-  test(4)
-
-def test_4():
-  test(5)
+def test_fat_5():
+  test_fat(5)
