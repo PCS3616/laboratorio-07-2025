@@ -32,6 +32,10 @@ def executable(output_dir: Path, main: Path, *subroutines: Path) -> Path:
 
     return executable_filepath
 
+def executable(main: Path) -> Path:
+  executable_filepath = Path(f"{main}.mvn")
+  mvn_cli(f"assemble -i {main}.asm".split(), executable_filepath)
+  return executable_filepath
 
 def run_mvn(input_text: str):
     p = subprocess.run(
