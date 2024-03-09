@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "2.1 OP2MNEM",
+      "setup": "(git clone https://github.com/PCS3616/MVN.git || true) && sudo -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest | grep browser_download_url | grep mvn-cli | cut -d '\"' -f 4) && chmod +x mvn-cli",
+      "run": "pytest -k 'op2mnem'",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 3
+    },
+    {
+      "name": "2.2 MNEM2OP",
+      "setup": "(git clone https://github.com/PCS3616/MVN.git || true) && sudo -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest | grep browser_download_url | grep mvn-cli | cut -d '\"' -f 4) && chmod +x mvn-cli",
+      "run": "pytest -k 'mnem2op'",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 3
+    },
+    {
+      "name": "1 Fatorial",
+      "setup": "(git clone https://github.com/PCS3616/MVN.git || true) && sudo -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest | grep browser_download_url | grep mvn-cli | cut -d '\"' -f 4) && chmod +x mvn-cli",
+      "run": "pytest -k \"test_fat\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 4
+    }
+  ]
+}
