@@ -167,18 +167,3 @@ def test_mnem2op(tmp_path: Path, mnemonic: str, opcode: str):
     result = run_mnem2op(mnemonic)
     result = result.strip().upper()
     assert result == opcode
-
-# def test_mnem2op2():
-#     for i in range(len(MNEMONICS)):
-#       result = run_mnem2op(MNEMONICS[i])
-#       result = result.strip().upper()
-#       assert result == OPCODES[i]
-      
-# def test_op2mnem2():
-#     for i in range(len(OPCODES)):
-#       result = run_op2mnem(OPCODES[i])
-#       result = result.strip().upper()
-#       assert result == MNEMONICS[i]
-
-# test_mnem2op2()
-# test_op2mnem2()

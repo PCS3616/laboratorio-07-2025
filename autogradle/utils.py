@@ -6,9 +6,9 @@ SUBMISSION_PATH = Path('./submission')
 
 
 def mvn_cli(arguments: list[str], output_filepath: str | Path):
-    command = ["./mvn-cli"] + arguments
+    command = f"./mvn-cli {' '.join(arguments)} || mvn-cli {' '.join(arguments)}"
     with open(output_filepath, "w", encoding="utf8") as output_file:
-        subprocess.run(command, check=True, stdout=output_file)
+        subprocess.run(command, shell=True, check=True, stdout=output_file)
 
 
 def executable(output_dir: Path, main: Path, *subroutines: Path) -> Path:
@@ -33,7 +33,11 @@ def executable(output_dir: Path, main: Path, *subroutines: Path) -> Path:
     return executable_filepath
 
 def executable(main: Path) -> Path:
+  asm_program_filepath = Path(f"{main}.asm")
   executable_filepath = Path(f"{main}.mvn")
+
+  assert asm_program_filepath.exists(), f"A submissão não contém o arquivo '{asm_program_filepath.name}'"
+
   mvn_cli(f"assemble -i {main}.asm".split(), executable_filepath)
   return executable_filepath
 
